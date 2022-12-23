@@ -20,4 +20,4 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.resource('posts', 'PostsController').apiOnly()
+Route.resource('posts', 'PostsController').apiOnly().bind('Post')

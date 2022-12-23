@@ -29,19 +29,12 @@ export default class PostsController {
   }
 
   // Show single post method
-  public async show({ params, response }: HttpContextContract) {
-    const { id } = params
-
-    const post: any = await Post.find(id)
-    if (!post) {
-      return response.notFound({ message: 'Post not found' })
-    }
-
+  public async show({ post, response }) {
     return response.ok(post)
   }
 
   // Update a post method
-  public async update({ request, params, response }: HttpContextContract) {
+  public async update({ post, request, response }) {
     /** Schema definition */
     const postSchema = schema.create({
       title: schema.string({ trim: true }, [rules.maxLength(255)]),
@@ -50,13 +43,6 @@ export default class PostsController {
 
     /** Validation */
     const payload: any = await request.validate({ schema: postSchema })
-
-    const { id } = params
-
-    const post: any = await Post.find(id)
-    if (!post) {
-      return response.notFound({ message: 'Post not found' })
-    }
 
     post.title = payload.title
     post.content = payload.content
@@ -67,14 +53,7 @@ export default class PostsController {
   }
 
   // Delete a post method
-  public async destroy({ params, response }: HttpContextContract) {
-    const { id } = params
-
-    const post: any = await Post.find(id)
-    if (!post) {
-      return response.notFound({ message: 'Post not found' })
-    }
-
+  public async destroy({ post, response }) {
     await post.delete()
 
     return response.ok({ message: 'Post deleted successfully.' })
